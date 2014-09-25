@@ -495,6 +495,15 @@ module RSpec
             include_examples "preserves method visibility", :protected
           end
 
+          context "validating `with` args against the method signature" do
+            it 'fails fast when given more args than the method supports' do
+              prevents {
+                dbl = class_double(LoadedClass)
+                allow(dbl).to receive(:defined_class_method).with(2, :args)
+              }
+            end
+          end
+
           it 'checks that stubbed methods are invoked with the correct arity' do
             o = class_double('LoadedClass', :defined_class_method => 1)
             expect {
